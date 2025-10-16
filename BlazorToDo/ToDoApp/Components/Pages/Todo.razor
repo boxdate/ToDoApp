@@ -1,0 +1,38 @@
+@page "/todo"
+@rendermode InteractiveServer
+@using ToDoApp.Data
+
+<h3>ToDo List</h3>
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            <input type="checkbox" @bind="todo.IsDone" />
+            <span style="@(todo.IsDone ? "text-decoration: line-through;" : "")">
+                @todo.Title
+            </span>
+        </li>
+    }
+</ul>
+
+<input @bind="newTodoTitle" placeholder="新しいタスク" />
+<button @onclick="AddTodo">追加</button>
+
+@code {
+    // ToDoリストを保持するフィールド
+    private List<TodoItem> todos = new();
+
+    // 入力フォームと連携するフィールド
+    private string? newTodoTitle;
+
+    // 「追加」ボタンが押されたときに実行されるメソッド
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodoTitle))
+        {
+            todos.Add(new TodoItem { Title = newTodoTitle });
+            newTodoTitle = string.Empty; // 入力欄をクリア
+        }
+    }
+}
