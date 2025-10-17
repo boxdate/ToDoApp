@@ -1,5 +1,6 @@
 @page "/todo"
-@using BlazorTodo.Data
+@rendermode InteractiveServer
+@using ToDoApp.Data
 
 <h3>ToDo List</h3>
 
@@ -11,6 +12,7 @@
             <span style="@(todo.IsDone ? "text-decoration: line-through;" : "")">
                 @todo.Title
             </span>
+            
         </li>
     }
 </ul>
