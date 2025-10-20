@@ -1,0 +1,21 @@
+@using ToDoApp.Data
+
+<li class="list-group-item d-flex justify-content-between align-items-center">
+    <div>
+        <input type="checkbox" class="form-check-input me-2" @bind="Item.IsDone" />
+        <span style="@(Item.IsDone ? "text-decoration: line-through;" : "")">
+            @Item.Title
+        </span>
+    </div>
+    <button class="btn btn-sm btn-outline-danger" @onclick="() => OnDeleteClicked.InvokeAsync(Item)">削除</button>
+</li>
+
+@code {
+    // 親から渡されるタスクデータ
+    [Parameter]
+    public TodoItem Item { get; set; } = new();
+
+    // 親に「削除ボタンが押された」ことを通知するイベント
+    [Parameter]
+    public EventCallback<TodoItem> OnDeleteClicked { get; set; }
+}

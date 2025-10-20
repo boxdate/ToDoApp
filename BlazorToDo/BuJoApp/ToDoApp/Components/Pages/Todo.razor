@@ -1,40 +1,50 @@
 @page "/todo"
 @rendermode InteractiveServer
 @using ToDoApp.Data
-
+@using ToDoApp.Components
 @using System.IO
 @using System.Text.Json
 
-<h3>ToDo List</h3>
+<h3>Daily ToDo List</h3>
 
-<ul>
-    @foreach (var todo in todos)
-    {
-        <li>
-            <input type="checkbox" @bind="todo.IsDone" />
-            <span style="@(todo.IsDone ? "text-decoration: line-through;" : "")">
-                @todo.Title
-            </span>
-            <button @onclick="() => RemoveTodo(todo)">削除</button>
-        </li>
-    }
-</ul>
+<div class="card bg-light mb-4">
+    <div class="card-body">
+        <div class="input-group">
+            <input type="date" class="form-control" @bind="newTaskDate" />
+            <input @bind="newTodoTitle" @bind:event="oninput" class="form-control" placeholder="新しいタスク" />
+            <button class="btn btn-primary" @onclick="AddTodo">追加</button>
+        </div>
+    </div>
+</div>
 
-<input @bind="newTodoTitle" @bind:event="oninput" placeholder="新しいタスク" />
-<button @onclick="AddTodo">追加</button>
+
+@foreach (var dayGroup in todos.GroupBy(t => t.Date).OrderByDescending(g => g.Key))
+{
+    <div class="mb-3">
+        <h4>@dayGroup.Key.ToLongDateString()</h4>
+        <ul class="list-group">
+            @foreach (var todo in dayGroup)
+            {
+                <TodoItemDisplay Item="todo" OnDeleteClicked="RemoveTodo" />
+            }
+        </ul>
+    </div>
+}
+
 
 @code {
     private List<TodoItem> todos = new();
     private string? newTodoTitle;
-    private const string FilePath = "todos.json"; // 保存するファイル名
+    // 新しいタスクの日付を保持。初期値は今日。
+    private DateOnly newTaskDate = DateOnly.FromDateTime(DateTime.Now);
+    
+    private const string FilePath = "todos.json";
 
-    // ページが初期化されたときに一度だけ実行されるメソッド
     protected override async Task OnInitializedAsync()
     {
         await LoadTodosFromFile();
     }
 
-    // ファイルからToDoリストを読み込むメソッド
     private async Task LoadTodosFromFile()
     {
         if (File.Exists(FilePath))
@@ -48,7 +58,6 @@
         }
     }
 
-    // ToDoリストをファイルに保存するメソッド
     private async Task SaveTodosToFile()
     {
         var json = JsonSerializer.Serialize(todos);
@@ -59,15 +68,21 @@
     {
         if (!string.IsNullOrWhiteSpace(newTodoTitle))
         {
-            todos.Add(new TodoItem { Title = newTodoTitle, IsDone = false });
+            var newItem = new TodoItem 
+            { 
+                Title = newTodoTitle, 
+                IsDone = false,
+                Date = newTaskDate // 選択された日付を保存
+            };
+            todos.Add(newItem);
             newTodoTitle = string.Empty;
-            await SaveTodosToFile(); // 保存処理を呼び出し
+            await SaveTodosToFile();
         }
     }
 
     private async Task RemoveTodo(TodoItem todoToRemove)
     {
         todos.Remove(todoToRemove);
-        await SaveTodosToFile(); // 保存処理を呼び出し
+        await SaveTodosToFile();
     }
 }
