@@ -12,6 +12,7 @@
             <span style="@(todo.IsDone ? "text-decoration: line-through;" : "")">
                 @todo.Title
             </span>
+            <button @onclick="() => RemoveTodo(todo)">削除</button>
         </li>
     }
 </ul>
@@ -30,5 +31,10 @@
             todos.Add(new TodoItem { Title = newTodoTitle, IsDone = false });
             newTodoTitle = string.Empty;
         }
+    }
+    
+    private void RemoveTodo(TodoItem todoToRemove)
+    {
+        todos.Remove(todoToRemove);
     }
 }
