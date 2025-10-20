@@ -5,37 +5,43 @@
 @using System.IO
 @using System.Text.Json
 
-<h3>Daily ToDo List</h3>
+@* ▼▼▼ 全体をcontainerで囲み、タイトルを追加 ▼▼▼ *@
+<div class="container mt-4">
+    <h1 class="mb-4">Daily ToDo List</h1>
 
-<div class="card bg-light mb-4">
-    <div class="card-body">
-        <div class="input-group">
-            <input type="date" class="form-control" @bind="newTaskDate" />
-            <input @bind="newTodoTitle" @bind:event="oninput" class="form-control" placeholder="新しいタスク" />
-            <button class="btn btn-primary" @onclick="AddTodo">追加</button>
+    @* ▼▼▼ 入力フォームをcardで囲む ▼▼▼ *@
+    <div class="card bg-light mb-4">
+        <div class="card-body">
+            <h5 class="card-title">新しいタスクの追加</h5>
+            <div class="input-group">
+                <input type="date" class="form-control" @bind="newTaskDate" />
+                <input @bind="newTodoTitle" @bind:event="oninput" class="form-control" placeholder="タスクの内容" />
+                <button class="btn btn-primary" @onclick="AddTodo">追加</button>
+            </div>
         </div>
     </div>
+
+    @* ▼▼▼ 日毎のリスト表示部分を修正 ▼▼▼ *@
+    @foreach (var dayGroup in todos.GroupBy(t => t.Date).OrderByDescending(g => g.Key))
+    {
+        <div class="mb-3">
+            <h4>@dayGroup.Key.ToLongDateString()</h4>
+            @* ▼▼▼ ulタグにlist-groupクラスを追加 ▼▼▼ *@
+            <ul class="list-group">
+                @foreach (var todo in dayGroup)
+                {
+                    <TodoItemDisplay Item="todo" OnDeleteClicked="RemoveTodo" />
+                }
+            </ul>
+        </div>
+    }
 </div>
 
 
-@foreach (var dayGroup in todos.GroupBy(t => t.Date).OrderByDescending(g => g.Key))
-{
-    <div class="mb-3">
-        <h4>@dayGroup.Key.ToLongDateString()</h4>
-        <ul class="list-group">
-            @foreach (var todo in dayGroup)
-            {
-                <TodoItemDisplay Item="todo" OnDeleteClicked="RemoveTodo" />
-            }
-        </ul>
-    </div>
-}
-
-
 @code {
+    // C#のコード部分は変更ありません
     private List<TodoItem> todos = new();
     private string? newTodoTitle;
-    // 新しいタスクの日付を保持。初期値は今日。
     private DateOnly newTaskDate = DateOnly.FromDateTime(DateTime.Now);
     
     private const string FilePath = "todos.json";
@@ -72,7 +78,7 @@
             { 
                 Title = newTodoTitle, 
                 IsDone = false,
-                Date = newTaskDate // 選択された日付を保存
+                Date = newTaskDate
             };
             todos.Add(newItem);
             newTodoTitle = string.Empty;
