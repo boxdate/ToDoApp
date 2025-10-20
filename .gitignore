@@ -27,3 +27,5 @@ BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/staticwebassets/msbuild.build.ToDoAp
 BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.ToDoApp.props
 BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.ToDoApp.props
 BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/staticwebassets/msbuild.ToDoApp.Microsoft.AspNetCore.StaticWebAssets.props
+BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/ToDoApp.AssemblyInfo.cs
+BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/ToDoApp.AssemblyInfoInputs.cache
