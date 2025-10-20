@@ -29,3 +29,7 @@ BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/staticwebassets/msbuild.buildTransit
 BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/staticwebassets/msbuild.ToDoApp.Microsoft.AspNetCore.StaticWebAssets.props
 BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/ToDoApp.AssemblyInfo.cs
 BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/ToDoApp.AssemblyInfoInputs.cache
+BlazorToDo/BuJoApp/ToDoApp/todos.json
+BlazorToDo/BuJoApp/ToDoApp/bin/Debug/net8.0/todos.json
+BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/ToDoApp.AssemblyInfo.cs
+BlazorToDo/BuJoApp/ToDoApp/obj/Debug/net8.0/ToDoApp.AssemblyInfoInputs.cache

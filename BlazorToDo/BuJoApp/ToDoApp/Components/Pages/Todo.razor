@@ -2,6 +2,9 @@
 @rendermode InteractiveServer
 @using ToDoApp.Data
 
+@using System.IO
+@using System.Text.Json
+
 <h3>ToDo List</h3>
 
 <ul>
@@ -23,18 +26,48 @@
 @code {
     private List<TodoItem> todos = new();
     private string? newTodoTitle;
+    private const string FilePath = "todos.json"; // 保存するファイル名
 
-    private void AddTodo()
+    // ページが初期化されたときに一度だけ実行されるメソッド
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTodosFromFile();
+    }
+
+    // ファイルからToDoリストを読み込むメソッド
+    private async Task LoadTodosFromFile()
+    {
+        if (File.Exists(FilePath))
+        {
+            var json = await File.ReadAllTextAsync(FilePath);
+            var loadedTodos = JsonSerializer.Deserialize<List<TodoItem>>(json);
+            if (loadedTodos is not null)
+            {
+                todos = loadedTodos;
+            }
+        }
+    }
+
+    // ToDoリストをファイルに保存するメソッド
+    private async Task SaveTodosToFile()
+    {
+        var json = JsonSerializer.Serialize(todos);
+        await File.WriteAllTextAsync(FilePath, json);
+    }
+
+    private async Task AddTodo()
     {
         if (!string.IsNullOrWhiteSpace(newTodoTitle))
         {
             todos.Add(new TodoItem { Title = newTodoTitle, IsDone = false });
             newTodoTitle = string.Empty;
+            await SaveTodosToFile(); // 保存処理を呼び出し
         }
     }
-    
-    private void RemoveTodo(TodoItem todoToRemove)
+
+    private async Task RemoveTodo(TodoItem todoToRemove)
     {
         todos.Remove(todoToRemove);
+        await SaveTodosToFile(); // 保存処理を呼び出し
     }
 }
