@@ -28,3 +28,4 @@
 /home/boxdate/Git/Learning/ToDoApp/BlazorToDo/ToDoApp/obj/Debug/net8.0/ToDoApp.pdb
 /home/boxdate/Git/Learning/ToDoApp/BlazorToDo/ToDoApp/obj/Debug/net8.0/ToDoApp.genruntimeconfig.cache
 /home/boxdate/Git/Learning/ToDoApp/BlazorToDo/ToDoApp/obj/Debug/net8.0/ref/ToDoApp.dll
+/home/boxdate/Git/Learning/ToDoApp/BlazorToDo/ToDoApp/bin/Debug/net8.0/todos.json

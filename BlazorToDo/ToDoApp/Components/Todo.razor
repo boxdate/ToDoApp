@@ -1,0 +1,36 @@
+@page "/todo"
+@rendermode InteractiveServer
+@using ToDoApp.Data
+@using ToDoApp.Components
+
+<h3>Bullet Journal Style ToDo</h3>
+
+<div class="input-group mb-3">
+    <input @bind="newTodoTitle" @bind:event="oninput" class="form-control" placeholder="新しいエントリー" />
+    <button class="btn btn-primary" @onclick="AddTodo">追加</button>
+</div>
+
+<div class="mb-3">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="taskType" id="typeTask" @onchange="() => newTaskType = TaskType.Task" checked />
+        <label class="form-check-label" for="typeTask">・ Task</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="taskType" id="typeEvent" @onchange="() => newTaskType = TaskType.Event" />
+        <label class="form-check-label" for="typeEvent">○ Event</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="taskType" id="typeNote" @onchange="() => newTaskType = TaskType.Note" />
+        <label class="form-check-label" for="typeNote">- Note</label>
+    </div>
+</div>
+
+<ul class="list-group">
+    @foreach (var todo in todos)
+    {
+        <TodoItemDisplay 
+            Item="todo" 
+            OnStatusChanged="(newStatus) => UpdateTaskStatus(todo.Id, newStatus)" 
+            OnDeleteClicked="() => RemoveTodo(todo.Id)" />
+    }
+</ul>
