@@ -33,6 +33,15 @@
                     <TodoItemDisplay Item="todo" OnDeleteClicked="RemoveTodo" />
                 }
             </ul>
+            <ul class="list-group">
+                @foreach (var todo in todos)
+                {
+                    <TodoItemDisplay 
+                        Item="todo" 
+                        OnDeleteClicked="RemoveTodo" 
+                        OnUpdateClicked="UpdateTodo" /> @* ← この行を追加 *@
+                }
+            </ul>
         </div>
     }
 </div>
@@ -91,4 +100,11 @@
         todos.Remove(todoToRemove);
         await SaveTodosToFile();
     }
+    private async Task UpdateTodo(TodoItem itemToUpdate)
+    {
+        // 編集されたアイテムは既にリスト内で更新されているので、
+        // ファイルに保存するだけでOK
+        await SaveTodosToFile();
+    }
+
 }
