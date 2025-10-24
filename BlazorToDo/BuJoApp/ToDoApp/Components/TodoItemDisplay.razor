@@ -1,11 +1,8 @@
 @using ToDoApp.Data
 
 <li class="list-group-item d-flex justify-content-between align-items-center">
-
-    @* ▼▼▼ if文で表示を切り替える ▼▼▼ *@
     @if (isEditing)
     {
-        @* --- 編集中 --- *@
         <div class="input-group">
             <input @bind="editingTitle" class="form-control" />
             <button class="btn btn-sm btn-success" @onclick="SaveEdit">保存</button>
@@ -13,12 +10,9 @@
     }
     else
     {
-        @* --- 通常時 --- *@
         <div>
-            <input type="checkbox" class="form-check-input me-2" @bind="Item.IsDone" />
-            <span style="@(Item.IsDone ? "text-decoration: line-through;" : "")">
-                @Item.Title
-            </span>
+            <input type="checkbox" class="form-check-input me-2" @bind="Item.IsDone" @bind:after="NotifyUpdate" />
+            <span style="@(Item.IsDone ? "text-decoration: line-through;" : "")">@Item.Title</span>
         </div>
         <div>
             <button class="btn btn-sm btn-outline-primary me-2" @onclick="StartEditing">編集</button>
@@ -30,31 +24,32 @@
 @code {
     [Parameter]
     public TodoItem Item { get; set; } = new();
+
     [Parameter]
     public EventCallback<TodoItem> OnDeleteClicked { get; set; }
-
-    // 親コンポーネントに「内容が更新された」ことを通知するイベント
+    
     [Parameter]
     public EventCallback<TodoItem> OnUpdateClicked { get; set; }
 
-    // このタスクが編集中かどうかを管理するフラグ
     private bool isEditing = false;
-    
-    // 編集用の一時的なタイトルを保持する変数
     private string editingTitle = string.Empty;
 
-    // 編集モードを開始するメソッド
     private void StartEditing()
     {
         isEditing = true;
         editingTitle = Item.Title ?? string.Empty;
     }
 
-    // 編集を保存するメソッド
-    private void SaveEdit()
+    private async Task SaveEdit()
     {
         Item.Title = editingTitle;
         isEditing = false;
-        OnUpdateClicked.InvokeAsync(Item);
+        await OnUpdateClicked.InvokeAsync(Item);
+    }
+    
+    // チェックボックスの状態が変わった後にも更新を通知する
+    private async Task NotifyUpdate()
+    {
+        await OnUpdateClicked.InvokeAsync(Item);
     }
 }
