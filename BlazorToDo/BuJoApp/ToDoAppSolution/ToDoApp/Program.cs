@@ -9,7 +9,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped<ITodoService, JsonTodoService>();
+// 古い登録を置き換える:
+// builder.Services.AddScoped<ITodoService, JsonTodoService>();
+
+// この新しい登録に置き換える:
+builder.Services.AddScoped<ITodoService>(sp => new JsonTodoService("todos.json"));
 
 var app = builder.Build();
 

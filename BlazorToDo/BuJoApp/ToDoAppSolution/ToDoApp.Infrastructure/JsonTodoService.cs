@@ -1,30 +1,37 @@
-// using と namespace が正しいか確認
 using System.IO;
 using System.Text.Json;
-using ToDoApp.Application; // Applicationを参照
-using ToDoApp.Domain;      // Domainを参照
+using ToDoApp.Application;
+using ToDoApp.Domain;
 
 namespace ToDoApp.Infrastructure
 {
     public class JsonTodoService : ITodoService
     {
-        private const string FilePath = "todos.json";
+        // ファイルパスを保存する
+        private readonly string _filePath;
+
+        // ファイルパスを受け取るコンストラクタ
+        public JsonTodoService(string filePath = "todos.json") // デフォルトは "todos.json"
+        {
+            _filePath = filePath;
+        }
 
         public async Task<List<TodoItem>> GetTodosAsync()
         {
-            if (!File.Exists(FilePath))
+            // 保存されたファイルパスを使用する
+            if (!File.Exists(_filePath))
             {
                 return new List<TodoItem>();
             }
-
-            var json = await File.ReadAllTextAsync(FilePath);
+            var json = await File.ReadAllTextAsync(_filePath);
             return JsonSerializer.Deserialize<List<TodoItem>>(json) ?? new List<TodoItem>();
         }
 
         public async Task SaveTodosAsync(List<TodoItem> todos)
         {
             var json = JsonSerializer.Serialize(todos);
-            await File.WriteAllTextAsync(FilePath, json);
+            // 保存されたファイルパスを使用する
+            await File.WriteAllTextAsync(_filePath, json);
         }
     }
 }
