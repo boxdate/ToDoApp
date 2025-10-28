@@ -1,10 +1,15 @@
 using ToDoApp.Components;
+using ToDoApp.Application;
+using ToDoApp.Domain;
+using ToDoApp.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddScoped<ITodoService, JsonTodoService>();
 
 var app = builder.Build();
 

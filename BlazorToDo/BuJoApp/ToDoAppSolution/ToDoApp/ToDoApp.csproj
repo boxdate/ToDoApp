@@ -10,4 +10,9 @@
     <Watch Remove="todos.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ToDoApp.Application\ToDoApp.Application.csproj" />
+    <ProjectReference Include="..\ToDoApp.Infrastructure\ToDoApp.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

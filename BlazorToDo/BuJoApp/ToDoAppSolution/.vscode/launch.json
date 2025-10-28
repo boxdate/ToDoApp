@@ -1,0 +1,40 @@
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            // 名前を分かりやすく変更
+            "name": "Launch ToDoApp (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            
+            // ▼▼▼ この行を修正 ▼▼▼
+            // 実行するDLLの場所を、サブフォルダ内のプロジェクトに正しく指定
+            "program": "${workspaceFolder}/ToDoApp/bin/Debug/net8.0/ToDoApp.dll",
+            
+            "args": [],
+            
+            // ▼▼▼ この行を修正 ▼▼▼
+            // 作業ディレクトリを、プロジェクトフォルダ（.csprojがある場所）に指定
+            "cwd": "${workspaceFolder}/ToDoApp", 
+            
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}
