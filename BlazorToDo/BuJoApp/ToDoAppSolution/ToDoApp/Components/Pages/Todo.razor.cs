@@ -13,22 +13,33 @@ namespace ToDoApp.Components.Pages
         private string? newTodoTitle;
         private DateOnly newTaskDate = DateOnly.FromDateTime(DateTime.Now);
 
-        protected override async Task OnInitializedAsync()
-        {
-            // サービスを使ってデータを読み込む
-            todos = await TodoService.GetTodosAsync();
-        }
+        // タスクの優先度を保持する変数を追加
+       private TaskPriority newTaskPriority = TaskPriority.Medium; // デフォルトはミディアム
+
+        protected override async Task OnInitializedAsync() => await LoadTodos();
+
+        private async Task LoadTodos() => todos = await TodoService.GetTodosAsync();
+        private async Task SaveTodos() => await TodoService.SaveTodosAsync(todos);
+
 
         private async Task AddTodo()
         {
             if (!string.IsNullOrWhiteSpace(newTodoTitle))
             {
-                var newItem = new TodoItem { Title = newTodoTitle, IsDone = false, Date = newTaskDate };
+                var newItem = new TodoItem
+                {
+                    Title = newTodoTitle,
+                    IsDone = false,
+                    Date = newTaskDate,
+                    Priority =newTaskPriority // 選択された優先度を保存
+                };
                 todos.Add(newItem);
+                todos = new List<TodoItem>(todos);
                 newTodoTitle = string.Empty;
+                newTaskPriority = TaskPriority.Medium; // 入力後、優先度はデフォルトに戻す
                 
                 // サービスを使ってデータを保存する
-                await TodoService.SaveTodosAsync(todos);
+                await SaveTodos();
             }
         }
         

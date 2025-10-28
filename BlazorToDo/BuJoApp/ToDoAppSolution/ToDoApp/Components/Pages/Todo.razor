@@ -5,13 +5,28 @@
 
 <h3>Daily ToDo List</h3>
 
-<div class="card bg-light mb-4">
-    <div class="card-body">
-        <h5 class="card-title">新しいタスクの追加</h5>
-        <div class="input-group">
+<div class="card-body">
+    <h5 class="card-title">新しいタスクの追加</h5>
+    <div class="row g-2"> @* ← rowクラスで行を分割 *@
+        <div class="col-md-3"> @* ← 日付選択部分 *@
             <input type="date" class="form-control" @bind="newTaskDate" />
+        </div>
+        <div class="col-md-5"> @* ← タスク内容入力部分 *@
             <input @bind="newTodoTitle" @bind:event="oninput" class="form-control" placeholder="タスクの内容" />
-            <button class="btn btn-primary" @onclick="AddTodo">追加</button>
+        </div>
+        
+        @* ▼▼▼ 優先度選択ドロップダウンを追加 ▼▼▼ *@
+        <div class="col-md-2">
+            <select class="form-select" @bind="newTaskPriority">
+                @foreach (var priorityValue in Enum.GetValues<TaskPriority>())
+                {
+                    <option value="@priorityValue">@priorityValue</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-2"> @* ← 追加ボタン部分 *@
+            <button class="btn btn-primary w-100" @onclick="AddTodo">追加</button>
         </div>
     </div>
 </div>
